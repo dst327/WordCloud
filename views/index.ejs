@@ -1,0 +1,46 @@
+<!-- index.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/styles.css">
+  <title>Word Cloud Project</title>
+</head>
+<body>
+  <div id="wordCloud"></div>
+
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script>
+    // Fetch top stories from the New York Times API
+    fetch('/api/word-cloud')
+      .then(response => response.json())
+      .then(data => {
+   
+        const words = data.words;
+
+       
+        d3.select('#wordCloud')
+          .selectAll('a')
+          .data(words)
+          .enter()
+          .append('a')
+          .attr('href', d => `/api/word-cloud/${d.word}`)
+          .attr('target', '_blank')
+          .append('span')
+          .text(d => d.word)
+          .style('font-size', d => `${d.count * 6}px`) 
+          .style('color', getRandomColor)
+          .style('margin', '0.1rem')
+        
+
+      })
+      .catch(error => console.error('Error fetching top stories:', error));
+
+    // Function to generate a random color
+    function getRandomColor() {
+      return '#' + Math.floor(Math.random()*16777215).toString(16);
+    }
+  </script>
+</body>
+</html>

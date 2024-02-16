@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>word-cloud</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <!-- <link rel="stylesheet" href="/css/style.css"> -->
+    <link href="https://api.fontshare.com/v2/css?f[]=gambetta@1,2&f[]=general-sans@1,2&display=swap" rel="stylesheet">
+</head>
+
+<body style="background-color: black;">
+
+  
+    <section class="container" style="height: 100vh;display: flex; justify-content: center; align-items: center;">
+        <div class="marquee-wrapper" style="user-select: none;">
+            <div class="marquee-content scrollingX" style=" height: 90vh;">
+               <%val.forEach((a)=>{%>
+                <div class="card-testimonial" style=" height: 240px; width: 150px; background-color: #2b2a2a; border-radius: 6px; padding: 9px; box-shadow: 0.5px 0.5px white;">
+                    <a href="<%=a.url%>" style="text-decoration: none;">
+                        <article>
+                            <picture>
+                                <source media="(min-width: 768px)" srcset="<%=a.image%>">
+                                <img src="<%=a.image%>" alt="sample-one.jpeg" style="width: 100%;">
+                            </picture>
+                            <h4 style="font-size: 6px; color: #fff; margin-top: 10px; letter-spacing: 0.4px;"><%=a.name%></h4>
+                            <article class="short-description">
+                                <p style="font-size: 6px; color: #fff; margin-top: 4px; line-height: 8px;"><%=a.description%>.</p>
+                            </article>
+                        </article>
+                    </a>
+                </div>
+             <%  })%>
+               
+            </div>
+        </div>
+    </section>
+
+
+    <script src="/js/index.js" defer></script>
+</body>
+
+</html>
