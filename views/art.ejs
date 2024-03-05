@@ -1,45 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>word-cloud</title>
-    <link rel="stylesheet" href="/css/index.css">
-    <!-- <link rel="stylesheet" href="/css/style.css"> -->
-    <link href="https://api.fontshare.com/v2/css?f[]=gambetta@1,2&f[]=general-sans@1,2&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italianno&display=swap" rel="stylesheet">
+    <title>wordCloud</title>
+    <style>
+        *{
+            margin: 0;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
+<body >
+    <div style="background-color: white;">
+    <h2 style="text-align: center;margin-bottom:0.5rem ; font-family: 'Italianno', cursive;
+    font-style: normal; font-size: 5rem;font-weight: 400; ">Top News of the day</h2>
+    <hr/>
+    <hr/>
+    <h3 style="margin: 1rem ; font-family:  cursive;font-weight: 500;font-size: 1.5rem; ">Articles of the day</h3>
+    <div style="display: flex; flex-wrap: wrap; margin:auto;">
 
-<body style="background-color: black;">
-
-  
-    <section class="container" style="height: 100vh;display: flex; justify-content: center; align-items: center;">
-        <div class="marquee-wrapper" style="user-select: none;">
-            <div class="marquee-content scrollingX" style=" height: 90vh;">
-               <%val.forEach((a)=>{%>
-                <div class="card-testimonial" style=" height: 240px; width: 150px; background-color: #2b2a2a; border-radius: 6px; padding: 9px; box-shadow: 0.5px 0.5px white;">
-                    <a href="<%=a.url%>" style="text-decoration: none;">
-                        <article>
-                            <picture>
-                                <source media="(min-width: 768px)" srcset="<%=a.image%>">
-                                <img src="<%=a.image%>" alt="sample-one.jpeg" style="width: 100%;">
-                            </picture>
-                            <h4 style="font-size: 6px; color: #fff; margin-top: 10px; letter-spacing: 0.4px;"><%=a.name%></h4>
-                            <article class="short-description">
-                                <p style="font-size: 6px; color: #fff; margin-top: 4px; line-height: 8px;"><%=a.description%>.</p>
-                            </article>
+        <%val.forEach((a)=>{%>
+            <div class="card-testimonial" style="height: 240px; width: 150px; background-color: white; border-radius: 6px; padding: 9px; box-shadow: 0.5px 0.5px 5px black; margin: 0.5rem;border: 0.2px solid rgb(87, 85, 85);">
+                <a href="<%=a.url%>" style="text-decoration: none;">
+                    <article>
+                        <picture>
+                            <source media="(min-width: 768px)" srcset="<%=a.image%>">
+                            <img src="<%=a.image%>" alt="sample-one.jpeg" style="width: 100%;">
+                        </picture>
+                        <h4 style="font-size: 6px; color: black; margin-top: 10px; letter-spacing: 0.4px;"><%=a.name%></h4>
+                        <article class="short-description">
+                            <p style="font-size: 6px; color: black; margin-top: 4px; line-height: 8px;"><%=a.description%>.</p>
                         </article>
-                    </a>
-                </div>
-             <%  })%>
-               
+                    </article>
+                </a>
             </div>
-        </div>
-    </section>
+         <%  })%>
+    </div>
+    <hr/>
+    <h3 style="margin: 1rem; font-family:  cursive;font-weight: 500;font-size: 1.5rem;" >Videos of the day</h3>
+    <div style="display: flex; flex-wrap: wrap; margin:auto;">
 
-
-    <script src="/js/index.js" defer></script>
+        <%val.forEach((a)=>{%>
+            <div class="card-testimonial" style="height: 240px; width: 150px; background-color: white; border-radius: 6px; padding: 9px; box-shadow: 1px 1px 5px black; margin: 0.5rem;border: 0.5px solid black;">
+                <a href="<%=a.url%>" style="text-decoration: none;">
+                    <article>
+                        <picture>
+                            <source media="(min-width: 768px)" srcset="<%=a.image%>">
+                            <img src="<%=a.image%>" alt="sample-one.jpeg" style="width: 100%;">
+                        </picture>
+                        <h4 style="font-size: 6px; color: black; margin-top: 10px; letter-spacing: 0.4px;"><%=a.name%></h4>
+                        <article class="short-description">
+                            <p style="font-size: 6px; color: black; margin-top: 4px; line-height: 8px;"><%=a.description%>.</p>
+                        </article>
+                    </article>
+                </a>
+            </div>
+         <%  })%>
+    </div>
+</div>
 </body>
-
 </html>
