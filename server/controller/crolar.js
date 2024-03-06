@@ -19,6 +19,7 @@ exports.getData = async (req, res) => {
 
 exports.getArtic = async (req, res) => {
   try {
+    const reqQuary = req.query.t;
     let config = {
       method: "get",
       maxBodyLength: Infinity,
@@ -432,8 +433,8 @@ exports.getArtic = async (req, res) => {
       });
       return acc;
     }, []);
-
-    res.render("art", { val });
+    if (reqQuary == "Articles") res.render("art", { val });
+    else res.render("videos", { val });
   } catch (error) {
     console.log(error);
   }
