@@ -208,4 +208,5 @@ function data() {
 
   return val;
 }
-module.exports = data;
+
+module.exports = { data, processText };
