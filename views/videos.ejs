@@ -17,9 +17,9 @@
   <div style="background-color: transparent; margin: 5%;">
     <div class="container">
       <% val.forEach((a) => { %>
-        <% if (a.datePublish.includes("https")) { %>
-          <div class="card" style="background-image: url('<%= a.datePublish %>');">
-            <a href="<%= a.contentUrl %>" class="card-link">
+        <% if (a.image.includes("https")) { %>
+          <div class="card" style="background-image: url('<%= a.image %>');">
+            <a href="<%= a.url %>" class="card-link">
               <div class="card-text">
                 <h4><%= a.name %></h4>
                 <p><%= a.description %></p>
