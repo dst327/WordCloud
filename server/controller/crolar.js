@@ -1,4 +1,4 @@
-const processText = require("../tools/processTest");
+const { data, processText } = require("../tools/processTest");
 const articalText = require("../tools/articals");
 const vidoslText = require("../tools/vidos");
 const axios = require("axios");
@@ -28,38 +28,48 @@ exports.getArtic = async (req, res) => {
       maxBodyLength: Infinity,
       url: `https://api.bing.microsoft.com/v7.0/news/search?q=${req.params.q}`,
       headers: {
-        "Ocp-Apim-Subscription-Key": "17148315f52d4f51b4cce01c7c86d7df",
+        "Ocp-Apim-Subscription-Key": "c103f00da0564a3188975792742fd03d",
       },
     };
+    let vconfig = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `https://api.bing.microsoft.com/v7.0/videos/search?q=${req.params.q}`,
+      headers: {
+        "Ocp-Apim-Subscription-Key": "c103f00da0564a3188975792742fd03d",
+      },
+    };
+    const resp = await axios.request(config);
+    // const resp = articalText();
 
-    // const resp = await axios.request(config);
-    const resp = articalText();
-
-    const video = vidoslText();
+    const vresp = await axios.request(vconfig);
 
     // const val = resp.data.value.reduce(
-    const val = video.reduce(
-      (acc, { name, datePublish, thumbnail, description, contentUrl }) => {
+    const val = vresp.data.value.reduce(
+      (acc, { name, webSearchUrl, thumbnailUrl, description }) => {
         acc.push({
           name,
-          datePublish,
-          image: thumbnail,
+          url: webSearchUrl,
+          image: thumbnailUrl || "",
           description,
-          contentUrl,
         });
         return acc;
       },
       []
     );
-    const va = resp.reduce((acc, { name, url, thumbnail, description }) => {
-      acc.push({
-        name,
-        url,
-        image: thumbnail,
-        description,
-      });
-      return acc;
-    }, []);
+
+    const va = resp.data.value.reduce(
+      (acc, { name, url, image, description }) => {
+        acc.push({
+          name,
+          url,
+          image: image?.thumbnail.contentUrl || "",
+          description,
+        });
+        return acc;
+      },
+      []
+    );
 
     if (reqQuary == "Articles") res.render("art", { va });
     else res.render("videos", { val });
