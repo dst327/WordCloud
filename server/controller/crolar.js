@@ -12,7 +12,9 @@ exports.getHomePage = async (req, res) => {
 
 exports.getData = async (req, res) => {
   try {
-    const processedWords = await processText();
+    const data = req.query.input;
+
+    const processedWords = await processText(data);
 
     res.json({ words: processedWords });
   } catch (error) {
@@ -23,10 +25,28 @@ exports.getData = async (req, res) => {
 exports.getArtic = async (req, res) => {
   try {
     const reqQuary = req.query.t;
+    const datee = new Date();
+    var date;
+    if (req.query.day == datee.getDay()) {
+      date = `${datee.getDate().toString().padStart(2, "0")}/${(
+        datee.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${datee.getFullYear()}`;
+    } else {
+      let lastWeek = new Date(datee);
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      date = `${lastWeek.getDate().toString().padStart(2, "0")}/${(
+        lastWeek.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, "0")}/${lastWeek.getFullYear()}`;
+    }
+
     let config = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `https://api.bing.microsoft.com/v7.0/news/search?q=${req.params.q}`,
+      url: `https://api.bing.microsoft.com/v7.0/news/search?q=${req.params.q}&sortBy=${date}`,
       headers: {
         "Ocp-Apim-Subscription-Key": "c103f00da0564a3188975792742fd03d",
       },
@@ -34,7 +54,7 @@ exports.getArtic = async (req, res) => {
     let vconfig = {
       method: "get",
       maxBodyLength: Infinity,
-      url: `https://api.bing.microsoft.com/v7.0/videos/search?q=${req.params.q}`,
+      url: `https://api.bing.microsoft.com/v7.0/videos/search?q=${req.params.q}&sortBy=${date}`,
       headers: {
         "Ocp-Apim-Subscription-Key": "c103f00da0564a3188975792742fd03d",
       },
