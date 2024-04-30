@@ -1,4 +1,4 @@
-
+<!-- index.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +7,7 @@
 
   <!-- Bootstrap CSS link -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <title>Word Cloud</title>
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <script src="https://rawgit.com/jasondavies/d3-cloud/master/build/d3.layout.cloud.js"></script>
@@ -16,8 +17,34 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
+ <div style="display: flex; justify-content: center;align-items: center; padding-top:2rem ;">
+  <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio-1" autocomplete="off" >
+    <label class="btn btn-outline-primary" for="btnradio-1">mon</label>
+  
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio-2" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio-2">tue</label>
+  
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio-3" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio-3">wed </label>
+      
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio-4" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio-4">thu  </label>
+      
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio-5" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio-5">fri </label>
+      
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio-6" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio-6">sat </label>
+      
+    <input type="radio" class="btn-check" name="btnradio" id="btnradio-0" autocomplete="off">
+    <label class="btn btn-outline-primary" for="btnradio-0">sun </label>
+    
+  </div>
+ </div>
   <!-- Centered container -->
   <div class="container d-flex align-items-center justify-content-center" style="height: 100vh; width: 100vw;">
+    
     <div id="wordCloud" ></div>
   </div>
 
@@ -43,6 +70,14 @@
   </div>
 
   <script>
+    var checkedRadio ;
+const filt=document.querySelectorAll('.btn-check');
+
+
+
+    const day=new Date().getDay()
+    document.getElementById(`btnradio-${day}`).checked =true;
+    checkedRadio=day
     // Encapsulate the word cloud functionality
     function wordCloud(selector) {
       var fill = d3.scale.category20();
@@ -110,8 +145,8 @@
     }
 
     // Fetch words from the API
-    function fetchWordCloudData() {
-      return fetch('/api/word-cloud')
+    function fetchWordCloudData(day) {
+      return fetch(`/api/word-cloud?input=${day}`)
           .then(response => response.json())
           .catch(error => console.error('Error fetching word cloud data:', error));
     }
@@ -119,24 +154,37 @@
     var wrd;
 
     // Prepare one of the sample sentences
-    function getWords() {
-      return fetchWordCloudData()
+    function getWords(day) {
+      return fetchWordCloudData(day)
           .then(data => {
               const words = data.words;
-              
-              return words.map(word => ({
+              console.log(words)
+           if(typeof words=="string")
+           {
+            myWordCloud.innerText="No Data found"
+        return[""]
+           }else{
+
+            return words.map(word => ({
                   text: word.word,
                   size: 10 + word.count * 8
               }));
+           }
+              
           });
     }
 
     // This method tells the word cloud to redraw with a new set of words
-    async function showNewWords(vis) {
-      const words = await getWords();
+    async function showNewWords(vis,day) {
+      if(!day)
+      {
+        day=new Date().getDay()
+
+      }
+      const words = await getWords(day);
       wrd = words;
       vis.update(words);
-//setInterval(function() { updateshowNewWords(vis); }, 58000);
+      setInterval(function() { updateshowNewWords(vis); }, 250000);
     }
 
     function updateshowNewWords(vis) {
@@ -144,24 +192,37 @@
     }
 
     // Create a new instance of the word cloud visualisation
-    var myWordCloud = wordCloud('#wordCloud');
 
-    // Start cycling through the demo data
-    showNewWords(myWordCloud);
 
     function submitRedirect() {
       // Get the text from the modal
       const wordText = $('#modalWord').text();
       // Redirect to the specified page
-      window.location.href = '/api/word-cloud/' + wordText+"/?t=Articles";
+
+      window.location.href = '/api/word-cloud/' + wordText+"/?t=Articles&day="+checkedRadio;
     }
 
     function submitRedirectVideo() {
       // Get the text from the modal
       const wordText = $('#modalWord').text();
       // Redirect to the specified page
-      window.location.href = '/api/word-cloud/' + wordText+"/?t=Videos";
+      window.location.href = '/api/word-cloud/' + wordText+"/?t=Videos&day="+checkedRadio;
     }
+    filt.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+const day=btn.id.split("-")[1];
+checkedRadio=day
+
+showNewWords(myWordCloud,day);
+
+  })
+})
+var myWordCloud = wordCloud('#wordCloud');
+
+   
+showNewWords(myWordCloud,day);
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 </html>
