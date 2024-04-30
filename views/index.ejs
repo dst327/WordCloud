@@ -158,7 +158,7 @@ const filt=document.querySelectorAll('.btn-check');
       return fetchWordCloudData(day)
           .then(data => {
               const words = data.words;
-              console.log(words)
+             
            if(typeof words=="string")
            {
             myWordCloud.innerText="No Data found"
