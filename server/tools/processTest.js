@@ -1,60 +1,76 @@
 const axios = require("axios");
-async function processText() {
+const { json } = require("body-parser");
+const fs = require("fs");
+async function processText(input) {
   try {
-    const apiKey = "PTptKAkW811u4DGCY9hS2gip2WgEFLsG";
-    const response = await axios.get(
-      `https://api.nytimes.com/svc/topstories/v2/us.json?api-key=${apiKey}`
-    );
+    const day = new Date().getDay();
+    if (input == day) {
+      const apiKey = "PTptKAkW811u4DGCY9hS2gip2WgEFLsG";
+      const response = await axios.get(
+        `https://api.nytimes.com/svc/topstories/v2/us.json?api-key=${apiKey}`
+      );
 
-    const stopWords = new Set([
-      "and",
-      "is",
-      "it",
-      "are",
-      "the",
-      "of",
-      "in",
-      "to",
-      "for",
-      "on",
-      "at",
-      "a",
-      ",",
-    ]);
+      const stopWords = new Set([
+        "and",
+        "is",
+        "it",
+        "are",
+        "the",
+        "of",
+        "in",
+        "to",
+        "for",
+        "on",
+        "at",
+        "a",
+        ",",
+      ]);
 
-    // Map articles to words with URLs
-    const words = response.data.results.flatMap((article) => {
-      const titleWords = article.title
-        .split(/\s+/)
-        .filter((word) => !stopWords.has(word.toLowerCase()));
+      // Map articles to words with URLs
+      const words = response.data.results.flatMap((article) => {
+        const titleWords = article.title
+          .split(/\s+/)
+          .filter((word) => !stopWords.has(word.toLowerCase()));
 
-      return titleWords.map((word) => ({
+        return titleWords.map((word) => ({
+          word,
+          url: article.url,
+        }));
+      });
+
+      // Count occurrences of each word along with URL
+      const wordCount = {};
+      words.forEach(({ word, url }) => {
+        const lowercaseWord = word.toLowerCase();
+        wordCount[lowercaseWord] = {
+          count:
+            (wordCount[lowercaseWord] && wordCount[lowercaseWord].count + 1) ||
+            1,
+          url,
+        };
+      });
+
+      // Create an array of unique words with their counts and URLs
+      const uniqueWords = Object.keys(wordCount).map((word) => ({
         word,
-        url: article.url,
+        count: wordCount[word].count,
+        url: wordCount[word].url,
       }));
-    });
 
-    // Count occurrences of each word along with URL
-    const wordCount = {};
-    words.forEach(({ word, url }) => {
-      const lowercaseWord = word.toLowerCase();
-      wordCount[lowercaseWord] = {
-        count:
-          (wordCount[lowercaseWord] && wordCount[lowercaseWord].count + 1) || 1,
-        url,
-      };
-    });
-
-    // Create an array of unique words with their counts and URLs
-    const uniqueWords = Object.keys(wordCount).map((word) => ({
-      word,
-      count: wordCount[word].count,
-      url: wordCount[word].url,
-    }));
-
-    // uniqueWords.sort((a, b) => b.count - a.count);
-
-    return uniqueWords;
+      // uniqueWords.sort((a, b) => b.count - a.count);
+      const data = JSON.stringify(uniqueWords);
+      fs.writeFile(`${day}.txt`, data, (err) => {
+        if (err) console.log(err);
+      });
+      return uniqueWords;
+    } else {
+      try {
+        const data = fs.readFileSync(`${input}.txt`, "utf8");
+        return JSON.parse(data);
+      } catch (err) {
+        return "No Data";
+      }
+    }
   } catch (error) {
     console.log(error);
     console.error("Error fetching top stories:", error.message);
