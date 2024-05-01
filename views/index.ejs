@@ -16,50 +16,51 @@
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-<body>
- <div style="display: flex; justify-content: center;align-items: center; padding-top:2rem ;">
-  <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio-1" autocomplete="off" >
-    <label class="btn btn-outline-primary" for="btnradio-1">mon</label>
-  
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio-2" autocomplete="off">
-    <label class="btn btn-outline-primary" for="btnradio-2">tue</label>
-  
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio-3" autocomplete="off">
-    <label class="btn btn-outline-primary" for="btnradio-3">wed </label>
-      
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio-4" autocomplete="off">
-    <label class="btn btn-outline-primary" for="btnradio-4">thu  </label>
-      
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio-5" autocomplete="off">
-    <label class="btn btn-outline-primary" for="btnradio-5">fri </label>
-      
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio-6" autocomplete="off">
-    <label class="btn btn-outline-primary" for="btnradio-6">sat </label>
-      
-    <input type="radio" class="btn-check" name="btnradio" id="btnradio-0" autocomplete="off">
-    <label class="btn btn-outline-primary" for="btnradio-0">sun </label>
-    
-  </div>
- </div>
+<body style="max-height: 85vh;height: 85vh; margin: 0;padding: 0; box-sizing: border-box; background-color: rgb(207, 207, 207);">
+ 
   <!-- Centered container -->
-  <div class="container d-flex align-items-center justify-content-center" style="height: 100vh; width: 100vw;">
+  <div class="container d-flex align-items-center justify-content-center" style="height: 85vh; width: 100vw;">
     
     <div id="wordCloud" ></div>
+    
   </div>
-
+  <div style="display: flex; justify-content: center;align-items: center; top: 100px;">
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio-1" autocomplete="off" >
+      <label class="btn btn-outline-primary" for="btnradio-1">mon</label>
+    
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio-2" autocomplete="off">
+      <label class="btn btn-outline-primary" for="btnradio-2">tue</label>
+    
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio-3" autocomplete="off">
+      <label class="btn btn-outline-primary" for="btnradio-3">wed </label>
+        
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio-4" autocomplete="off">
+      <label class="btn btn-outline-primary" for="btnradio-4">thu  </label>
+        
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio-5" autocomplete="off">
+      <label class="btn btn-outline-primary" for="btnradio-5">fri </label>
+        
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio-6" autocomplete="off">
+      <label class="btn btn-outline-primary" for="btnradio-6">sat </label>
+        
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio-0" autocomplete="off">
+      <label class="btn btn-outline-primary" for="btnradio-0">sun </label>
+      
+    </div>
+   </div>
   <!-- Bootstrap Modal -->
   <div class="modal" tabindex="-1" role="dialog" id="wordModal">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content ">
         <div class="modal-header">
-          <h5 class="modal-title"  id="wordModalLabel">Word Details</h5>
+          <h5 class="modal-title"  id="wordModalLabel">News Headlines</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body d-flex justify-content-center">
-          <p id="modalWord" style="font-size: 2.5rem;font-style:italic;"></p>
+          <p id="modalWord" style="font-size: 2rem;font-style:italic;"></p>
         </div>
         <div class="modal-footer d-flex justify-content-center">
           <button type="button" onclick="submitRedirect()" class="btn btn-primary" >Articles</button>
@@ -158,7 +159,7 @@ const filt=document.querySelectorAll('.btn-check');
       return fetchWordCloudData(day)
           .then(data => {
               const words = data.words;
-             
+            
            if(typeof words=="string")
            {
             myWordCloud.innerText="No Data found"
